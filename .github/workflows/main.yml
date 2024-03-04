@@ -1,5 +1,8 @@
 
 name: Docker Build and Push
+env:
+  CURRENT_TAG: V1
+  PREVIOUS_TAG: latest
 
 
 on:
@@ -31,4 +34,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shoes:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
