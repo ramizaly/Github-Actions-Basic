@@ -1,7 +1,7 @@
 
 name: Docker Build and Push
 env:
-  CURRENT_TAG: V6
+  CURRENT_TAG: V7
 
 
 on:
@@ -56,8 +56,8 @@ jobs:
             fi
 
       - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@master
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
             
