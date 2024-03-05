@@ -35,6 +35,9 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
+       - 
+       
+
       - name: multiple command
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -43,7 +46,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
             sudo docker stop $(docker ps -q) && docker rm $(docker ps -aq)
             sudo docker run -p 3000:3000 shoes:${{ env.CURRENT_TAG }}
 
