@@ -46,7 +46,10 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            sudo docker stop $(docker ps -q) && sudo docker rm $(docker ps -aq)
-            sudo docker run -p 3000:3000 shoes:${{ env.CURRENT_TAG }}
+            if [ "$(docker ps -q)" ]; then
+              echo "Stopping and removing containers..."
+              sudo docker stop $(docker ps -q) && sudo docker rm $(docker ps -aq)
+            fi
+            sudo docker run -p 3000:3000  ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
 
             
