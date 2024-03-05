@@ -1,7 +1,7 @@
 
 name: Docker Build and Push
 env:
-  CURRENT_TAG: V1
+  CURRENT_TAG: V2
   PREVIOUS_TAG: latest
 
 
@@ -51,5 +51,9 @@ jobs:
               sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
             fi
             sudo docker run -d -p 3000:3000  ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
+            if [ "$(sudo docker images -q -f dangling=true)" ]; then
+              echo "Removing unused images..."
+              sudo docker rmi $(sudo docker images -q -f dangling=true)
+            fi
 
             
