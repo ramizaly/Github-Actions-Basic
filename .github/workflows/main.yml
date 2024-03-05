@@ -46,10 +46,6 @@ jobs:
           script: |
             dangling_image_ids=$(docker images -q)
             docker run -d -p 3000:3000  ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
-            if [ "$dangling_image_ids" ]; then
-              echo "Removing unused images..."
-              docker rmi $dangling_image_ids
-            fi
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
