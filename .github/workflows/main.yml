@@ -45,8 +45,8 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
-            sudo docker stop $(docker ps -q) && docker rm $(docker ps -aq)
+            sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+            sudo docker stop $(docker ps -q) && sudo docker rm $(docker ps -aq)
             sudo docker run -p 3000:3000 shoes:${{ env.CURRENT_TAG }}
 
             
