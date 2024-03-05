@@ -35,8 +35,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
-       - 
-       
+            
 
       - name: multiple command
         uses: appleboy/ssh-action@v1.0.3
