@@ -1,7 +1,7 @@
 
 name: Docker Build and Push
 env:
-  CURRENT_TAG: V5
+  CURRENT_TAG: V6
 
 
 on:
@@ -44,7 +44,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cat ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | sudo docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             if [ "$(sudo docker ps -q)" ]; then
               echo "Stopping and removing containers..."
               sudo docker stop $(sudo docker ps -q) && sudo docker rm $(sudo docker ps -aq)
