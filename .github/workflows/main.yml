@@ -71,11 +71,11 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-           if docker image inspect ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }} &> /dev/null; then
-            echo "Image exists, deleting it..."
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }}
-          else
-            echo "Image does not exist."
-          fi
+            if docker image inspect ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }} &> /dev/null; then
+              echo "Image exists, deleting it..."
+              docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }}
+            else
+              echo "Image does not exist."
+            fi
 
             
