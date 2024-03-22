@@ -2,6 +2,7 @@
 name: Docker Build and Push
 env:
   CURRENT_TAG: V1
+  PREV_TAG: None
 
 
 on:
@@ -36,7 +37,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
             
 
-      - name: multiple command
+      - name: Stopping Old Container
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
@@ -44,12 +45,37 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            dangling_image_ids=$(docker images -q)
+            if docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }}"; then
+              echo "Stopping Old continer"
+              docker stop $(docker ps -q --filter "ancestor=${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }}")
+            else
+              echo "No container Running"
+            fi
+
+      - name: Run Container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
             docker run -d -p 3000:3000  ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.CURRENT_TAG }}
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Deleting Old image
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+           if docker image inspect ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }} &> /dev/null; then
+            echo "Image exists, deleting it..."
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/shoes:${{ env.PREV_TAG }}
+          else
+            echo "Image does not exist."
+          fi
+
             
