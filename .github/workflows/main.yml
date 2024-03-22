@@ -1,8 +1,8 @@
 
 name: Docker Build and Push
 env:
-  CURRENT_TAG: V1
-  PREV_TAG: None
+  CURRENT_TAG: V2
+  PREV_TAG: V1
 
 
 on:
